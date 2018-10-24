@@ -1,23 +1,18 @@
-# aa
+# poker-cms
+### 1. 依赖模块
+    pip install requests PyExecJS pillow
 
-
-
-from hashlib import md5
-from Crypto.Cipher import AES
-
-token = '305c300d06092a864886f70d0101010500034b003048024100d812a482263f7f6fe89756af3e50cd3ee12b66c5977f996994df948e05a69aebf422ca1bb8567231531dd574ead8a959ac6f8067718effcb01591e5649e99fb70203010001'
-username = '18206774149'
-password = 'aa8888'
-
-md5pass = md5(password.encode('utf-8')).hexdigest()
-
-encryption_suite = AES.new(token, AES.MODE_CBC, '')
-cipher_text = encryption_suite.encrypt(username + ',' + md5pass)
-
-print(cipher_text)
-
-
-
-
-----------------------------------------------------------------------------
-pip install pycryptodome
+### 3. 接口调用
+    from pokercms import cmsapi
+    # 查询带入提案
+    result = cmsapi.getBuyinList(username, password)
+    # 接受提案
+    result = cmsapi.acceptBuyin(username, password, 691598, 33515925)
+    # 拒绝提案
+    result = cmsapi.denyBuyin(username, password, 691598, 33515925)
+    # 查询俱乐部列表
+    result = cmsapi.getClubList(username, password)
+    # 查询牌局列表
+    result = getHistoryGameList(username, password, 588000, 1538323200000, 1540396800000)
+    # 查询战绩
+    result = cmsapi.getHistoryGameDetail(username, password, 33484968)
