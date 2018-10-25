@@ -4,15 +4,15 @@
 
 ### 3. 接口调用
     from pokercms import cmsapi
-    # 查询带入提案
-    result = cmsapi.getBuyinList(username, password)
-    # 接受提案
-    result = cmsapi.acceptBuyin(username, password, 691598, 33515925)
-    # 拒绝提案
-    result = cmsapi.denyBuyin(username, password, 691598, 33515925)
     # 查询俱乐部列表
     result = cmsapi.getClubList(username, password)
+    # 查询带入提案
+    result = cmsapi.getBuyinList(username, password. club_id)
+    # 接受提案
+    result = cmsapi.acceptBuyin(username, password, user_uuid, room_id)
+    # 拒绝提案
+    result = cmsapi.denyBuyin(username, password, user_uuid, room_id)
     # 查询牌局列表
-    result = getHistoryGameList(username, password, 588000, 1538323200000, 1540396800000)
+    result = getHistoryGameList(username, password, club_id, start_time, end_time)
     # 查询战绩
-    result = cmsapi.getHistoryGameDetail(username, password, 33484968)
+    result = cmsapi.getHistoryGameDetail(username, password, room_id)

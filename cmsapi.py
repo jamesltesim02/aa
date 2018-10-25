@@ -69,7 +69,7 @@ def login(username, password):
       'cookie': cookie
     }))
     tempfile.close()
-    set_julebu(username, password)
+    # set_julebu(username, password)
     return
   
   if result['iErrCode'] == 1103:
@@ -103,12 +103,15 @@ def invoke_api(api, username, password, params={}):
 
   return result
 
-def set_julebu(username, password):
-  julebu_list = invoke_api('club/getClubList', username, password)
-  julebu_id = julebu_list['result'][0]['lClubID']
-  invoke_api('club/clubInfo', username, password, params={'clubId': julebu_id})
+# def set_julebu(username, password):
+#   julebu_list = invoke_api('club/getClubList', username, password)
+#   julebu_id = julebu_list['result'][0]['lClubID']
+#   invoke_api('club/clubInfo', username, password, params={'clubId': julebu_id})
 
-def getBuyinList(username, password):
+def getBuyinList(username, password, club_id):
+  # 切换俱乐部
+  invoke_api('club/clubInfo', username, password, params={'clubId': club_id})
+  # 查询提案
   return invoke_api('game/getBuyinList', username, password)
 
 def acceptBuyin(username, password, user_uuid, room_id):
@@ -144,17 +147,24 @@ def getHistoryGameDetail(username, password, room_id):
 if __name__ == '__main__':
   username, password = '18206774149', 'aa8888'
 
+  # 查询俱乐部列表
+  # result = getClubList(username, password)
   # 查询带入提案
-  result = getBuyinList(username, password)
+  # result = getBuyinList(username, password, 588000)
   # 接受提案
   # result = acceptBuyin(username, password, 691598, 33515925)
   # 拒绝提案
-  # result = denyBuyin(username, password, 691598, 33515925)
-  # 查询俱乐部列表
-  # result = getClubList(username, password)
+  # result = denyBuyin(username, password, 1575516, 33530967)
   # 查询牌局列表
   #result = getHistoryGameList(username, password, 588000, 1538323200000, 1540396800000)
   # 查询战绩
   # result = getHistoryGameDetail(username, password, 33484968)
+  
+  # print(result)
 
-  print(result)
+  # 查询俱乐部列表
+  clubs = getClubList(username, password)['result']
+  # 假装有一个定时任务,每次都会查询所有俱乐部的提案
+  for c in clubs:
+    transfer_reqs = getBuyinList(username, password, c['lClubID'])
+    print(transfer_reqs)
