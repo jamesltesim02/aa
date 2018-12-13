@@ -713,6 +713,33 @@ class GameController extends AdminController {
         $this->success('匯入成功', U('Game/index'));
             
     }
+    
+    public function import_settlement_csv(){
+        $files = $_FILES['exl']['name'];
+
+
+        if(!strpos($files, ".xls")){
+            $this->error('不是Excel(xls)文件，请重新上传');    
+        }
+        
+        // 上传
+        $upload = new \Think\Upload();// 实例化上传类
+        $upload->maxSize   =     3145728 ;// 设置附件上传大小
+        $upload->exts      =     array('xls','xlsx');// 设置附件上传类型
+        $upload->rootPath  =     './Uploads/'; // 设置附件上传根目录
+        $upload->savePath  =     'settlement/'; // 设置附件上传（子）目录
+        //$upload->subName   =     array('date', 'Ym');
+        $upload->subName   =     '';
+        // 上传文件  
+        $info   =   $upload->upload();
+    
+        if ($info) {
+            $this->success('上传成功', U('Game/index'));
+        } else {
+            $this->error('上传失败');
+        }    
+    }
+    
 /* 处理上传exl数据
      * $file_name  文件路径
      */
