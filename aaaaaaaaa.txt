@@ -1,0 +1,140 @@
+天佑项目：
+
+前端接口地址： 120.26.84.105
+
+layui账号：15730309247   love920623
+
+测试环境账号： 15015349571   1234567
+
+工作安排：
+菜单，人事，车辆，运作
+
+
+进度模块:	
+	车辆管理 -> 临时库存
+
+
+### 启动zookeeper 
+    zkServer start
+
+### 启动redis 
+    redis-server &
+
+
+mysql密码: km4t4gi*_74F
+2019-09-04T01:36:09.984316Z 1 [Note] A temporary password is generated for root@localhost: km4t4gi*_74F
+
+If you lose this password, please consult the section How to Reset the Root Password in the MySQL reference manual.
+
+链接：https://pan.baidu.com/s/19VP18qSE2DtBPeJt69D1zw 
+提取码：eirn 
+第一个视频    人事+车辆
+链接：https://pan.baidu.com/s/1dd_a0m99kLbJH_fpul6ECg 
+提取码：ay32 
+第二个视频，安全
+链接：https://pan.baidu.com/s/1U1p8oQu1hyExvrBMNfLjfA 
+提取码：gtbj 
+第三个视频， 其他所有版块
+
+链接：https://pan.baidu.com/s/1_c1SKB4pxSYhiXCfhdEEuA 
+提取码：weph 
+
+
+
+新需求:
+     一期:
+	1.模板的编辑 增删查改
+	2.岗位 模板 关系的维护
+	3.入职审批完成后，自动生成要签的合同的任务，这个是根据这个人的岗位查询的映射表生成的
+	4.app调用接口获取任务及合同模板，并签字后提交
+	5.web后台可以在人员详情中查看任务完成的情况和下载签订的合同
+
+
+问题列表:
+1. 现有功能中是否已经有合同/协议上传的功能?
+
+后台:
+1.  新增入职协议时 如何与岗位关联起来, 应该有一个设置关联的功能?
+2. 员工签署协议管理列表是否查询所有员工, 然后显示所有员工对应签署的协议(包含APP 和 线下的)?
+3. 员工签署协议管理 -> 线下协议上传时的文件是否是纸质文档扫描件合并为一张整图或者是多个图片?
+
+APP:
+1. APP上的是否立即签署协议判断逻辑,  是否是判断当前员工已经签署完所有该岗位需要签署的协议就不会弹出?
+
+
+不同项目可以使用适用于自己的协议给员工进行签署（主要是PDF文件中，）；是否意味着所有项目针对的岗位都是可唯一区分的, 或者是协议创建时除了区分岗位还需要区分项目?
+
+
+针对文档签署是否是将签名图片插入到所有需要签署协议的文档, 不通的文档签署位置不同如何处理?
+
+
+
+
+更新SQL:
+DROP TABLE `ty_position_agreement` ;
+DROP TABLE `ty_agreement_sign`;
+DROP TABLE `ty_offline_agreement`;
+
+CREATE TABLE `ty_position_agreement` (
+  `id` bigint(50) NOT NULL COMMENT '主键',
+  `name` varchar(50) DEFAULT NULL COMMENT '文件模版名称',
+  `url` varchar(500) DEFAULT NULL COMMENT '文件模版路径',
+  `comment` varchar(100) DEFAULT NULL COMMENT '备注',
+  `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `expire_type` bigint(1) DEFAULT NULL COMMENT '有效期限类型: 1: 在职期内, 2: 签署起3年, 3: 签署起5年, 4: 离职2年内',
+  `delflag` bigint(1) DEFAULT NULL COMMENT '删除标志 0: 未删除, 1: 已删除',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建人(工号)',
+  `company_id` bigint(50) DEFAULT NULL COMMENT '项目id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+CREATE TABLE `ty_agreement_sign` (
+`id` bigint(50) NOT NULL COMMENT '主键',
+`employee_id` bigint(50) NULL COMMENT '员工id',
+`agreement_id` bigint(50) NULL COMMENT '协议id',
+`sign_time` datetime NULL COMMENT '签署时间',
+`agreement_path` varchar(500) NULL COMMENT '协议文件路径',
+`delflag` int(1) NULL COMMENT '是否已删除 0: 未删除, 1: 已删除',
+`update_by` varchar(50) NULL COMMENT '修改人',
+`update_time` datetime NULL COMMENT '修改时间',
+PRIMARY KEY (`id`) 
+);
+
+CREATE TABLE `ty_offline_agreement` (
+`id` bigint(50) NOT NULL COMMENT '主键',
+`employee_id` bigint(50) NULL COMMENT '员工id',
+`sign_time` datetime NULL COMMENT '签署时间',
+`agreement_path` varchar(500) NULL COMMENT '协议路径',
+`delflag` int(1) NULL COMMENT '删除状态 0: 未删除, 1: 已删除',
+`expire_type` int(1) NULL COMMENT '有效期限类型: 1: 在职期内, 2: 签署起3年, 3: 签署起5年, 4: 离职2年内',
+`status` int(1) NULL COMMENT '协议状态',
+`create_by` varchar(50) NULL COMMENT '创建人',
+`create_time` datetime NULL COMMENT '创建时间',
+PRIMARY KEY (`id`) 
+);
+
+
+
+需提供接口列表
+
+	
+协议模板管理
+	查询有效期限列表(下拉菜单)
+	协议模板列表
+	添加协议模板
+	查看协议模板
+	删除协议模板
+
+
+员工签署协议管理
+	员工协议下的员工列表查询
+	查询指定员工的签署协议列表
+	查询指定员工对指定协议的签署详情
+	上传线下签署协议
+
+APP
+	查询员工需签署协议列表
+	员工签署协议(首次签署完所有协议需要更新员工签署状态)
+	查询员工已签署协议列表(包含未签署, 已签署协议, 已过期协议)
+
+
