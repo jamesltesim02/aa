@@ -77,7 +77,7 @@ DROP TABLE if exists `ty_agreement_sign`;
 DROP TABLE if exists `ty_offline_agreement`;
 
 CREATE TABLE `ty_agreement` (
-  `id` bigint(50) NOT NULL COMMENT '主键',
+  `id` bigint(50) NOT NULL AUTO_INCREMENT COMMENT '主键' ,
   `name` varchar(50) DEFAULT NULL COMMENT '文件模版名称',
   `url` varchar(500) DEFAULT NULL COMMENT '文件模版路径',
   `comment` varchar(100) DEFAULT NULL COMMENT '备注',
@@ -90,7 +90,7 @@ CREATE TABLE `ty_agreement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 CREATE TABLE `ty_position_agreement` (
-  `id` bigint(50) NOT NULL COMMENT '主键',
+  `id` bigint(50) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `position_id` bigint(50) DEFAULT NULL COMMENT '职位id',
   `pos_agree_id` bigint(50) DEFAULT NULL COMMENT 'ty_agreement的id',
   PRIMARY KEY (`id`) USING BTREE
@@ -98,7 +98,7 @@ CREATE TABLE `ty_position_agreement` (
 
 
 CREATE TABLE `ty_agreement_sign` (
-`id` bigint(50) NOT NULL COMMENT '主键',
+`id` bigint(50) NOT NULL AUTO_INCREMENT COMMENT '主键',
 `employee_id` bigint(50) NULL COMMENT '员工id',
 `agreement_id` bigint(50) NULL COMMENT '协议id',
 `sign_time` datetime NULL COMMENT '签署时间',
@@ -110,7 +110,7 @@ PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `ty_offline_agreement` (
-`id` bigint(50) NOT NULL COMMENT '主键',
+`id` bigint(50) NOT NULL AUTO_INCREMENT COMMENT '主键',
 `employee_id` bigint(50) NULL COMMENT '员工id',
 `name` varchar(500) NULL COMMENT '协议名称',
 `sign_time` datetime NULL COMMENT '签署时间',
