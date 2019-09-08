@@ -110,8 +110,54 @@ CREATE TABLE `ty_offline_agreement` (
 `status` int(1) NULL COMMENT '协议状态',
 `create_by` varchar(50) NULL COMMENT '创建人',
 `create_time` datetime NULL COMMENT '创建时间',
+PRIMARY KEY (`id`) DROP TABLE if exists `ty_agreement` ;
+DROP TABLE if exists `ty_position_agreement` ;
+DROP TABLE if exists `ty_agreement_sign`;
+DROP TABLE if exists `ty_offline_agreement`;
+
+CREATE TABLE `ty_agreement` (
+  `id` bigint(50) NOT NULL COMMENT '主键',
+  `name` varchar(50) DEFAULT NULL COMMENT '文件模版名称',
+  `url` varchar(500) DEFAULT NULL COMMENT '文件模版路径',
+  `comment` varchar(100) DEFAULT NULL COMMENT '备注',
+  `create_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `expire_type` bigint(1) DEFAULT NULL COMMENT '有效期限类型: 1: 在职期内, 2: 签署起3年, 3: 签署起5年, 4: 离职2年内',
+  `delflag` bigint(1) DEFAULT NULL COMMENT '删除标志 0: 未删除, 1: 已删除',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建人(工号)',
+  `company_id` bigint(50) DEFAULT NULL COMMENT '项目id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+CREATE TABLE `ty_position_agreement` (
+  `id` bigint(50) NOT NULL COMMENT '主键',
+  `position_id` bigint(50) DEFAULT NULL COMMENT '职位id',
+  `pos_agree_id` bigint(50) DEFAULT NULL COMMENT 'ty_agreement的id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+
+CREATE TABLE `ty_agreement_sign` (
+`id` bigint(50) NOT NULL COMMENT '主键',
+`employee_id` bigint(50) NULL COMMENT '员工id',
+`agreement_id` bigint(50) NULL COMMENT '协议id',
+`sign_time` datetime NULL COMMENT '签署时间',
+`agreement_path` varchar(500) NULL COMMENT '协议文件路径',
+`delflag` int(1) NULL COMMENT '是否已删除 0: 未删除, 1: 已删除',
+`update_by` varchar(50) NULL COMMENT '修改人',
+`update_time` datetime NULL COMMENT '修改时间',
 PRIMARY KEY (`id`) 
 );
+
+CREATE TABLE `ty_offline_agreement` (
+`id` bigint(50) NOT NULL COMMENT '主键',
+`employee_id` bigint(50) NULL COMMENT '员工id',
+`name` varchar(500) NULL COMMENT '协议名称',
+`sign_time` datetime NULL COMMENT '签署时间',
+`agreement_path` varchar(500) NULL COMMENT '协议路径',
+`delflag` int(1) NULL COMMENT '删除状态 0: 未删除, 1: 已删除',
+`expire_type` int(1) NULL COMMENT '有效期限类型: 1: 在职期内, 2: 签署起3年, 3: 签署起5年, 4: 离职2年内',
+`status` int(1) NULL COMMENT '协议状态',
+`create_by` varchar(50) NULL COMMENT '创建人'
 
 
 
